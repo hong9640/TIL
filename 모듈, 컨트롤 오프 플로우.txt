@@ -1,0 +1,69 @@
+모듈, 컨트롤 오프 플로우
+
+모듈- 한 파일로 묶인 변수와 함수의 모음
+*특정한 기능*을 하는 코드가 작성된 파이썬 파일
+math 내장 모듈
+-파이썬이 미리 작성해 둔 수학 관련 변수와 함수가 작성된 모듈
+  import문 사용
+  import math
+print(math.sqrt(4))-모듈 가져옴, 모듈.함수
+  from 절 사용
+from math import sqrt-math 모듈에서 sqrt만 가져온다
+print(sqrt(4)-모듈을 가져온 것은 아님 그래서 math는 못 씀.
+'. (dot)' 연산자
+"점의 왼쪽 객체에서 점의 오른쪽 이름을 찾아라"
+print(math.pi) 
+print(math.sqrt(4))
+모듈 주의사항
+서로 다른 모듈이 같은 이름의 함수를 제공할 경우 문제 발생
+마지막에 import 된 이름으로 대체됨
+겹쳤을 때 as쓰면 됨
+as
+이걸 붙여 별칭을 부여
+import math #수학
+import random #랜덤 
+import datetime #시간 
+
+print(math.pi) 
+print(math.sqrt(4)) #얘는 모듈에서 바로 가져와서 충돌 위험 적음
+
+print(random.randint(1, 10))
+
+now = datetime.datetime.now()
+print(now)
+
+from math import pi, sqrt # 서로 다른 모듈이 같은 이름의 함수를 제공
+from my_math import sqrt # 마지막에 임포트 된 이름으로 대체됨 
+
+from math import pi, sqrt 
+from my_math import sqrt as my_sqrt # 이렇게 as문 사용하면 이름 충돌 해결
+sqrt(4)
+my_sqrt(4)
+사용자 정의 모듈
+모듈 하나 작성하고 다른 파일에서 모듈 임포트 하면 호출 가능
+ex) def add(x, y):--->my_math
+    return x + y
+math datetime 같은 것은 모듈의 라이브러리!
+import my_math #my_math에서 가져옴
+print(my_math.add(1, 2))
+
+파이썬 표준 라이브러리-파이썬 언어와 함께 제공되는 다양한 모듈과 패키지 모음
+패키지- 연관된 모듈들을 하나의 디렉토리에 모아 놓은 것
+폴더가 패키지고 그 안의 파일이 모듈 이렇게 이해하면 편함
+자세한 예시는 git 파일 참조. 너무 길다 ㅠㅠ 위에것도 너무 길어!
+
+psl 내부 패키지- 설치 없이 바로 import하여 사용
+*외부 패키지*- pip을 사용하여 설치 후 import 필요
+앞으로 개발 하게 되면 외부 패키지를 더 많이 씀
+pip- 외부 패키지들을 설치하도록 도와주는 파이썬의 패키지 관리 시스템- 이미 파이썬에 설치 되어 있음
+패키지 설치 코드
+pip instal somepackage-최신버전
+pip instal somepackage==1.0.5-xmrwjdqjwjs
+pip instal somepackage>=1.0.4-최소 버전
+uninstall로 바꾸면 삭제됨
+pip install requests- 외부 api 서버로의 요청-개발하게 되면 무조건 쓰게 될 것임
+이걸 설치 해야 import 사용 가능
+이거 예시도 git 보기
+
+패키지 사용 목적- 모듈들의 이름공간을 구분하여 충돌 방지
+모듈들을 효율적으로 관리하고 재사용 할 수 있도록 돕는 역할
