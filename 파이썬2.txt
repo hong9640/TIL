@@ -29,6 +29,12 @@ print(my_set_1 - my_set_2)  # {1, 2}
 # 교집합
 print(my_set_1 & my_set_2)  # {3}
 이렇게 기호하고 규칙 기억하기! 그리고 set도 순서 없음! 그래서 index 구조 안됨!
+또한 중복 제거 가능
+ex) 
+my_list = [1, 2, 2, 3, 4, 4, 5]
+unique_set = set(my_list)  # 중복 제거
+print(unique_set)  # {1, 2, 3, 4, 5}
+이거는 일단 데이터에서도 마찬가지 중복된 글자로 된 값 제거
 
 None- 값이 없음을 표현하는 자료형
 boolean-참과 거짓을 표현하는 자료형
