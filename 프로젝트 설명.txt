@@ -13,3 +13,5 @@ json.loads()- json 형식의 문자열을 파싱하여 파이썬 딕셔너리로
 외부 api는 가능하면 따로 저장해 두는 것이 좋음.
 api 3.0 은 유료임!!!
 api 하는 방법은 13기 라이브 pdf에 올라와 있음.
+labssafy에서 새 프로젝트 만들 때 반드시 본인 것을 선택해야 함!, 프로젝트 이름은 03-pjt 이렇게, 그리고 프라이베이트로. 절재 공공 안됨!!
+좌측 manage-members에서 invite members 찍고 거기서 우리 강사님 이름 찌겅야 함. 그리고 role를 maintainer로 선택해야 함.
