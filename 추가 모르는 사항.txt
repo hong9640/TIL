@@ -1,0 +1,26 @@
+items-딕셔너리의 키(key)와 값(value) 쌍을 튜플 형태로 반환하는 메서드입니다.
+[(1, "A"), (2, "B"), (3, "C")] 이런식으로 리스트 안의 튜플로 묶음
+input_dict = {1: 10, 2: 20, 3: 30}
+
+for k, v in input_dict.items():
+    print(f"키: {k}, 값: {v}")
+키: 1, 값: 10
+키: 2, 값: 20
+키: 3, 값: 30
+튜플일때 이렇게도 됨.
+
+setdefault-key가 dict에 있으면 값을 돌려준다
+
+>>> d = {"one": 1, "two": 2, "three": 3}
+>>> d.setdefault("one")
+1
+
+# four 라는 key 가 없으므로, default 값인 4를 반환함
+>>> d.setdefault("four", 4)
+4
+
+# 자료에 변화가 있음! 
+>>> print(d) 
+{'one': 1, 'two': 2, 'three': 3, 'four': 4}
+
+
