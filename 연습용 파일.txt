@@ -1,0 +1,9 @@
+데이터 타입
+숫자영- int float complex
+시퀀스- list, tuple, rane
+non 시퀀스- dict, set
+이거 조심!! -2 * 4 = -16 지수가 제일 우선순위!
+한번 변수에 할당 되면 그 값으로 간다 주의!!!
+2진수0b 80 16
+부동소수점 에러
+isdecimal-> 숫자만 반환!
