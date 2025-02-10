@@ -1,6 +1,6 @@
-chess = map(int, input().split())
-k = 1, q = 1, r = 2, b = 2, k = 2, p = 8
-for i in range(len(chess)):
-    if chess[i] > 0:
-
-
+cur_pieces = list(map(int, input().split()))
+correct_pieces = [1, 1, 2, 2, 2, 8]
+result = []
+for i in range(6):
+    result.append(correct_pieces[i] - cur_pieces[i])
+print(*result)
