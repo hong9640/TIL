@@ -1,6 +1,8 @@
-cur_pieces = list(map(int, input().split()))
-correct_pieces = [1, 1, 2, 2, 2, 8]
-result = []
-for i in range(6):
-    result.append(correct_pieces[i] - cur_pieces[i])
-print(*result)
+arr = list(map(int, input().split()))
+for i in range(len(arr)-1):
+    if arr[i] > arr[i + 1]:
+        print("YES")
+    elif arr[i] == 0 and arr[i + 1] == 0:
+        pass
+    elif arr[i] <= arr[i + 1]:
+        print("NO")
