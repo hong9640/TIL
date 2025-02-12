@@ -181,9 +181,29 @@ for i in range(N):
   - 크다면 오른쪽 반에 대해 새로 검색 수행
   - 이때도 각 반의 중앙에 있는 원소부터 비교하며 진행한다.
   - 찾고자 하는 값을 찾을 때까지 위의 과정을 반복한다.
-  - 못찾으면 실패.
+  - 못찾으면 실패.  
+  - def binary_search(arr, target):  
+    left = 0  
+    right = len(arr) - 1  
     
-    ### 인덱스
+    while left <= right:  
+        mid = (left + right) // 2  
+
+        if arr[mid] == target:  
+            return mid  # 검색 성공 시 인덱스 반환  
+        elif arr[mid] > target:  
+            right = mid - 1  
+        else:  
+            left = mid + 1  
+
+    return -1  # 검색 실패 시 -1 반환
+
+# 예시
+numbers = [2, 4, 7, 9, 11, 19, 23]
+print(binary_search(numbers, 11))  # 4 (인덱스 4)
+print(binary_search(numbers, 10))  # -1 (없음)
+    
+  ### 인덱스
 - 인덱스 라는 용어는 데이터베이스에서 유래, 테이블에 대한 동작 속도를 높혀주는 자료 구조
 - 데이터 베이스 분야가 아닌 곳에서는 look up table 등의 용어를 사용하기도 한다.
 - 인덱스를 저장하는데 필요한 공간한 보통 테이블을 저장하는데 필요한 디스크 공간보다 작다. 
@@ -282,6 +302,17 @@ for i in range(N):
 - s = ['a', 'b', 'c'], print(''.join(s)) -> abc
 
 - 문자열을 뒤집기 위해서는 문자열 길이를 2로 나눈 후 그에 나온 값의 횟수 만큼 서로 교환한다. 
+### 회문
+- def is_palindrome(text):  
+    length = len(text)  
+    for l in range(length // 2):  
+        if text[l] != text[length - 1 - l]:  
+            return False  
+    return True  
+- 이런 형식으로 풀면 된다.
+sentence = "abcde"
+print(is_palindrome(sentence))
+
 
 ### 연산
 
