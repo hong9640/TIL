@@ -48,7 +48,7 @@ def enclosed():
     print(a, b, c)  #10 2 3 ---들여쓰기 영역에 a,b는 없음.
 
 
-enclosed()
+- enclosed()
 
 print(a, b)  #1 2 ---전역에 1,2 있음
 
