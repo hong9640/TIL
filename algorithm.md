@@ -331,8 +331,8 @@ print(is_palindrome(sentence))
   - t = 'A pattern matching algorithm'
     p = 'rithm'
 
-M = len(p) # 찾을 패턴의 길이
-N = len(t) # 전체 텍스트의 길이
+- M = len(p) # 찾을 패턴의 길이
+- N = len(t) # 전체 텍스트의 길이
 
 def brute_force_while(p, t):  
     i = 0 # t의 인덱스
