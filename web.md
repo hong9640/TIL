@@ -143,6 +143,8 @@
 -  웹 개발자와 디자이너를 위한 종합적인 참고자료.
 -  검색할 때 검색할 이름을 쓰고 그 뒤에 mdn을 붙여 검색을 먼져 하기
 ## CSS Box Model 2
+- 각 방향이 있는데 좌상부분에서 top이 있고 오른쪽 방향이다. 바텀은 대각선 방향에 있고 반대 방향이다.
+- right는 우상부분에 있고 아래 방향이다, left는 대각선 반대편에 있고 위쪽이다.
 - 내용(content), 안쪽여백(padding), 테두리(border), 외부간격(margin)으로 구성되어 요소의 크기와 배치를 결정한다.
 - content box, padding box, border box, margin box로 이루어 진다.
 - 안쪽부터 content, padding, border, margin 이다.
