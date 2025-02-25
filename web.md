@@ -88,7 +88,7 @@
     - 자손 결합자(" "(space)): 첫번째 요소의 자손 요소들 선택, p span은 <p>안에 있는 모든 <span>을 선택, 하위레벨 상관 없다.
     - 자식 결합자(">"): 첫번째 요소의 직계 자식만 선택, ul > li은 <ul>안에 있는 모든 <li>를 선택. 한단계 아래 자식들만.
     - 자식이라는 것은 그 컨텐츠 안에 들어가 있어야 한다.
-    - <p> 여기 안에 있어야 지식이다. </p>
+    - <p> 여기 안에 있어야 자식이다. </p>
 - 명시도: 결과적으로 요소에 적용한 CSS선언을 결정하기 위한 알고리즘
 - CSS Selector에 가중치를 계산하여 어떤 스타일을 적요할지 결정.
 - 동일한 요소를 가리키는 2개 이상의 CSS규칙이 있는 경우 가장 높은 명시도를 가진 Selector가 승리하여 스타일이 적용됨
@@ -107,7 +107,7 @@
   - 상속 되는 속성: Text 관련 요소(font, color, text-align), opacity, visibility등 
   - 상속 되지 않는 속성: Box model 관련 요소(width, height, border, box-sizing), position 관련 요소(positoin, top/right/bottom/left, z-index) 등
 ## CSS Box Model
-- 웹 페이지의 모든 요소를 감싸는 사각형 상자 모델
+- 웹 페이지의 모든 html요소를 감싸는 사각형 상자 모델
 - 모든 요소는 네모난 박스로 되어 있으며 원은 네모 박스를 깎은 것이다.
 - 박스 타입:  
   - 1. Block box
@@ -117,11 +117,12 @@
     - block 특징:  
       - 항상 새로운 행으로 나뉜다.
       - width, height 속성 사용 가능
-      - h1 - 6, div로 나뉨
+      - h1 - 6, p, div가 대표적
     - inline 특징:  
       - 1. 새로운 행으로 넘어가지 않는다.
       - 2. 수직, 수평방향으로 나뉜다.
-      - 3. a, img, span, strong, em 등등
+      - 3. 수직방향: padding, margin, border 수평방향: padding, margins, borders적용용
+      - 4. a, img, span, strong, em 등등
   - 2. inner display type: 박스 내부의 요소들이 어떻게 배치될지를 결정, 속성: flex
   - 3. normal flow: 일반적인 흐름 또는 레이아웃을 변경하지 않은 경우이다. 웹 ㅍ에이지 요소가 배치되는 방식임.
 - html은 연속된 공백을 하나로 처리한다.
@@ -141,3 +142,137 @@
 -  mdn web docs
 -  웹 개발자와 디자이너를 위한 종합적인 참고자료.
 -  검색할 때 검색할 이름을 쓰고 그 뒤에 mdn을 붙여 검색을 먼져 하기
+## CSS Box Model 2
+- 내용(content), 안쪽여백(padding), 테두리(border), 외부간격(margin)으로 구성되어 요소의 크기와 배치를 결정한다.
+- content box, padding box, border box, margin box로 이루어 진다.
+- 안쪽부터 content, padding, border, margin 이다.
+- shothand 속성 - border, 작성 순서에는 영향을 주지 않는다.
+- 마진과 패딩 순서- 4개:상우하좌 3개: 상/좌우/하, 2개: 상하/좌우, 1개: 공통
+- 표준 상자 모델에서 width와 height속성 값을 성정하면 이 값은 컨텐트 박스의 크기를 조정하게 된다.
+- CSS는 보더 박스가 아닌 컨텐트 박스의 크기를 width값으로 지정한다.
+- 그래서 컨텐트 박스 기준으로 하지 않을 때는 box-sizing: border-box 이렇게 해서 보더 박스의 크기를 변경한다고 해야 한다.
+- inline-block: 인라인과 블록 요소 사이의 중간 지점을 제공하는 디스플레이 값  
+  - width, height 속성 사용 가능
+  - 패딩, 마진 및 보더로 인해 다른 요소가 상자에서 밀려남
+  - 새로운 행으로 넘어가지 않음
+  - 이걸 쓰면 가운데 정렬이 되고 테두리의 선 중 하나가 안보여도 보이게 된다.
+  - display: inline-block 이런식으로 쓴다.
+- none: 요소를 화변에 표시하지 않고, 공간조차 부여되지 않음.  
+  - class="box none" 이런식으로 쓰인다.
+  - 코드에는 있지만 당장은 필요가 없을 때, none을 써서 안보이게 만든다.
+
+## CSS position
+- 요소를 노멀플로우에서 제거하여 다른 위치로 배치하는 것
+- 다른 요소 위에 올리기, 화면의 특정 위치에 고정시키기 등 가능
+- CSS layout  
+  - 각 요소의 위치와 크기를 조정하여 웹 페이지의 디자인을 결정
+  - display, position, flexbox
+- 포지션은 4 방향 이동이 가능하다. top, bottom, left, right, Axis(z축) 이렇게 가능하다.
+- position 유형  
+  - static- 이거는 기본 상태. 현재 상태다.  
+    - 요소를 노멀 플로우에 따라 배치
+    - top, bottom, left, right 속성 적용되지 않음
+    - 기본값값
+  - relative  
+    - 요소를 노멀 플로우에 따라 배치
+    - 자신의 원래 위치를 기준으로 이동
+    - top, bottom, left, right속성으로 위치를 조정
+    - 다른 요소의 레이아웃에 영향을 주지 않음
+  - absolute  
+    - 요소를 노멀플로우에서 제거
+    - 가장 가까운 relative 부모 요소를 기준으로 이동
+    - 만족하는 부모 요소가 없다면 body 태크를 기준으로 한다
+    - top, bottom, left, right 속성으로 위치를 조정
+    - 문서에서 요소가 차지하는 공간이 없어짐
+    - 영상 밑에 영상길이 나타내는 것이 있는데 그것이 absolute를 사용한 것
+  - fixed  
+    - 요소를 노멀플로우에서 제거
+    - 현재 화면영역을 기준으로 이동
+    - 스크롤해도 항상 같은 위치에 유지됨
+    - top, bottom, left, right 속성으로 위치를 조정
+    - 문서에서 요소가 차지하는 공간이 없어짐
+    - 화면에서 '모바일 버전으로 보기', '설정' 같은 표시는 fixed이다.
+  - sticky  
+    - relative와 fixed의 특성을 결합한 속성
+    - 스크롤 위치가 임계점에 도달하기 전에 relative처럼 동작
+    - 스크롤이 특정 임계점에 도달하면 fixed처럼 동작하며 화면에 고정됨
+    - 만약 다음 스티키 요소가 나오면 당므 스티키 요소가 이전 스티키 요소의 자리를 대체
+    - 이전 스트키 요소가 고정되어 있던 위치와 다음 스트키 요소가 고정되어야 할 위치가 겹치게 되기 때문
+    - 위에 닿는 순간 고정되고 다음 스트키가 오면 그것으로 대체된다.
+- .relative {
+      /* top은 아래쪽이다. 실제 이동하는 것은 반대 방향이다. */
+      /* 아래 코드는 우하향으로 간것이다. */
+      position: relative;
+      background-color: lightblue;
+      top: 100px;
+      left: 100px;
+    }
+- z-index:  
+  - 기본값은 auto이고 부모 요소의 z-index값에 영향을 받는다.
+  - 같은 부모 내에서만 z-index값을 비교한다.
+  - 요소의 쌓임 순서를 정의한다.
+  - 정수 값을 사용해 z축 순서를 지정한다.
+  - 값이 클수록 요소가 위에 쌓이게 된다.
+  - 만약 z-index가 3,2,1이 있을 때 3이 z축에서 위여서 제일 위에 위치된다.
+- 포지션 목적:  
+  - 전체 페이지에 대한 레이아웃을 구성하는 것보다는 페이지 특정 항목의 위치를 조정하는 것.
+  - 너무 크게 사용할 필요는 없다.
+## CSS Flexbox
+- 전체를 담당한다.
+- 요소를 행과 열 형태로 배치하는 1차원 레이아웃 방식 -> 공간배열, 정렬
+- flex container - 주체, flex item, main axis - 가로선, main start, main end 이 두개는 세로 cross axis - 세로선 cross end, corss start. 이거는 가로
+- main axis:  
+  - flex item들이 배치되는 기본 축.
+  - main start에서 시작해서 end 방향으로 배치
+- flex container:  
+- 이 컨테이너의 1차 자식 요소들이 flex item이 된다. 
+- flexbox속성 값들을 사용하여 자식 요소 flex item들을 배치하는 주체
+- 플랙스 컨테이너 속성: display, flex-dirction ...
+- 플랙스 아이템 관련 속성: align-self, flex-grow, order, flex-basis  
+
+- flex-direction
+- flex-item이 나열되는 방향을 지정
+- 메인 축만 기억하면 된다. row일 경우 세로로, column일 경우 가로로 길게 배치된다.  
+
+- flex-wrap
+- flex item 목록이 flex container의 한 행에 들어가지 않을 경우 다른 행에 배치할지 여부 설정  
+
+- justify-content 주 축을 따라 flex item과 주위에 공간을 구배
+- justify-content: center; 이거 가운데 정렬  
+
+- align-content
+- 교차 축을 따라 flex item과 주위 공간을 분배
+- flex-wrap이 wrap또는 wrap-revers로 설정된 여러 행에만 적용됨
+- 한줄짜리 행에는 효과 없음.  
+
+- align-items
+- 교차 축을 다라 flex item 행을 정렬  
+- 
+- align-self
+- 교차 축을 따라 개별 flex-item을 정렬  
+
+- 목적에 따른 속성 분류:  
+  - 배치:  
+    - flex-direction, flex-wrap
+  - 공간 분배:  
+  - justify-content, align-content
+- 정렬:  
+  - align-items, align-self
+- justify:주축, align:교차축
+- 그런데 justify-items,self속성은 없는데 margin으로 정렬 및 배치가 가능하기 때문이다.
+
+- flex-grow:  
+  - 남는 행 여백을 비율에 따라 각 flex item에 분배
+  - 만약 100, 100, 100, 100, 200 이때 200은 비어 있음
+  - 앞의 4개에 1, 1, 0, 2 이렇게 주면
+  - 150, 150, 100, 20 이렇게 되는데 남은 200을 값 (1+1+0+2)로 나누면 50이 되고 
+  - 정해진 숫자 만큼 50을 더해준다. 그래서 100+50, 100+50, 100, 100+100
+- flex-basis는 flex item의 초기 크기 값을 지정하는데 width와 동시에 적용한 경우, basis가 우선이다.
+- 반응형 레이아웃
+- 다양한 디바이스와 화면 크기에 자동으로 적응하여 콘텐츠를 최적으로 표시하는 웹 레이아웃 방식
+- flex-wrap을 사용해 반응형 레이아웃을 작성한다.
+- 마진 상쇄:
+- 두 블록 타입 요소의 마진 탑과 바텀이 만나 더 큰 마진으로 결합되는 형상
+- 복잡한 레이아웃에서 요소 간 간격을 일관 되게 유지하기 위함
+- 요소 간의 간격을 더 예측 가능하고 관리하기 쉽게 만든다.
+- 일관성, 단순화
