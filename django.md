@@ -101,3 +101,68 @@
 - 순서:  
   - 요청 -> urls.py -> views.py <-> (models.py, temlplates) -> 응답
 - url경로는 반드시 '/'(slash로 끝나야 한다.)
+## django temlate system
+- 데이터 표현을 제어하면서 표현과 관련된 부분을 담당
+- DTL: template에서 조건, 반복, 변수 등의 프로그래밍적 기능을 제공  
+  - 1. variable: render함수의 세번째 인자로 딕셔너리 데이터 사용  
+    - 딕셔너리 키에 해당하는 문자열이 template에서 사용 가능한 변수명이 된다.
+    - {{variable}}
+  - 2. filters: 표시할 변수를 수정할 때 사용(변수 | 필터)  
+    - 연결이 가능하며 일부 필터는 인자를 받기도 한다.
+    - 60개의 빌트인 필터 제공
+    - {{variable|filter}}
+  - 3. tags: 반복, 또는 논리를 수행하여 제어 흐름을 만든다.   
+    - 일부 태그는 시작과 종료 태그가 필요
+    - 24개의 빌트인 템플레이트 태그 제공
+    - {% tag %}
+  - 4. comments(주석)   
+    - {%comment%}   
+    - ...   
+    - {%endcomment}   
+    - 이런식으로 주석을 처리한다.
+    - {#name#} 이런 식으로 단일 주석도 있다.
+- 공식문서에서 사용법 등을 찾아야 하는데 사이트에서 찍는 것은 비추천
+- django document 하고 다음에 필요한 것 예를 들면 list 이런 식으로 나열하고 검색
+- 나오는 결과 중 알맞는 것 찾아서 보기
+## 템플릿 상속:  
+- 페이지의 공통 요소를 포함하고 기본 스켈레톤 템플릿을 작성하여 상속 구조를 구축
+- block으로 범위를 지정한다.
+- extends tag: {5 extends 'path' %}
+- 자식 템플릿이 부모 템플릿을 확장한다는 것을 알림
+- 반드시 자식 템플릿 최상단에 작성되어야 하고 2개 이상 사용 불가
+- block tag: {%block name%} {%endblock name%}
+- 하위 템플릿에서 재정의 할 수 있는 블록을 정의
+- 상위 템플릿에 작성하며 하위 템플릿이 작성할 수 있는 공간을 지정하는 것
+## 요청과 응답
+- form tag: http 요청을 서버에 보내는 가장 편리한 방법
+- form, input이 제일 중요. form은 외각, input은 받는 것
+- 사용자로부터 할당된 데이터를 서버로 전송
+- 우리가 검색하면 키로 받는다.
+- 핵심은 query, 그리고 input에 name 이 없으면 검색 안됨
+- action & method: 데이터를 어디(action)로 어떤 방식(method)으로 요청할지
+- method에서 데이터를 어떤 방식으로 보낸 것인지 정의하는데 get, post가 있는데 get이 기본
+- get: 검색, 조회
+- post: 삭제, 수정, 생산 ...
+- input: 사용자의 데이터를 입력 받는 요소로 핵심 속성은 name이다.
+- name은 사용자가 입력한 데이터에 붙이는 이름(key)이다.
+- 문자열은 &로 연결된 key-value로 연결, 기본 url과는 물음표(?)로 구분된다.
+- 그리고 submit이 없으면 전송 안됨
+- request.GET.get('message') 이게 request 객체에서 form 데이터 추출
+## 장고 urls
+- url dispatcher
+- url 패텬을 정의하고 해당 패턴이 일치하는 요청을 처리할 view 함수를 연결
+- 템플릿이 많은 부분이 중복되게 된다. 이를 해결하기 위한 방법이 variable routing 이다.
+- url 일부에 변수를 포함시키는 것이다.
+- 작성법: <path_converter:variable_name> 타입: 변수명
+- path('articles/<int:num>/', views.detail)
+- inclue(): 프로젝트 내부 앱들의 url을 참조할 수 있도록 매핑하는 함수
+- from django.urls import path, include
+- path('articles/', include('articles.urls'))
+## url 이름 지정
+- 기존 articles/ 주소가 articles/index/로 변경되면 해당 urlㅇㄹ 사용하는 모든 위치를 찾아가 변경해야 한다. 그래서 name을 사용해 url에 이름을 지정해준다
+- naming url patterns: url에 이름을 지정
+- path('articles/', views.detail, name='index 이렇게')
+- 그러면 url을 작성하는 모든 곳에서 변경되는데 a와 form의 주소 쓰는데서 전부 바뀐다.
+- {%url 'dinner'%} 이렇게
+## url 이름 공간
+- 만약 두 앱의 url 이름이 같으면 url 맨 위에 app_name = "name" 이렇게 app_name을 맨 위에 써야 한다.
