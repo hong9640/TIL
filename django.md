@@ -166,3 +166,79 @@
 - {%url 'dinner'%} 이렇게
 ## url 이름 공간
 - 만약 두 앱의 url 이름이 같으면 url 맨 위에 app_name = "name" 이렇게 app_name을 맨 위에 써야 한다.
+## Model
+- db의 테이블을 정의하고 데이터를 조작할 수 있는 기능들을 제공
+- 테이블 구조를 설계하는 청사진
+- 우리가 파이썬으로 보내면 장고가 sql로 바꿔줌
+- 보통 프로젝트나 어플을 만들었을 때 기본적으로 import되어 있는 것은 무조건 쓰게 될 것 이라는 뜻.
+- class Article(models.Model): 여기서 Model에 대한 모든 정보를 가지고 온다.
+- django.db.models모듈의 Model이라는 부모 클래스를 상속받는다.
+- Model은 model에 관련된 모든 코드가 이미 작성되어 있는 클래스
+- 개발자는 가장 중요한 테이블 구조를 어떻게 설계할지에 대한 코드만 작성하기 위한 것이다.
+- 상속을 활용한 프레임워크의 기능 제공
+- 다음 줄의 title, content 같이 클래스의 변수명은 '필드'라고 부른다.
+- 그리고 charfield, textfield는 model field로 데이터베이스 테이블의 열을 나타내는 중요한 구성요소이며 데이터의 유형과 제역 조건을 정의한다.
+- title = models.CharField(max_length=10) 여기서 field는 데이터 타입을 결정한다. 그리고 클래스 상속, max_length=10 -> 10글자가 최대다. 그리고 이 옵션이 필수다.
+- 헷갈리면 클래스 다시 복습하기!
+- content = models.TextField() 이 코드의 TextField와 CharField의 기능은 다르다.
+## Model Field
+- db 테이블의 필드(열)을 정의하며, 해당 필드에 저장되는 데이터 타입과 제약 조건을 정의
+- Field types(필드 유형):  
+  - 데이터베이스에 저장될 데이터의 종류를 정의
+  - charfield(): 제한된 길이의 문자열을 저장. 그래서 필드의 최대 길이를 결정하는 max_length는 필수 옵션이다.
+  - textfield(): 길이 제한이 없는 대용량 텍스트를 저장하는데 무한대는 아니고 사용하는 시스템에 따라 달라진다.
+  - 주요 필드 유형:  
+    - 문자열 필드: charfield, textfield
+    - 숫자 필드: integerfield, floatfield
+    - 날짜/시간 필드: datefield, timefield, datetimefield
+    - 파일 관련 필드: filefield, imagefield
+    - 위의 필드들은 자주 쓰이는 필드 이다.
+- Field Options(필드 옵션):  
+  - 필드의 동작과 제약 조건을 정의
+  - 위의 charfield에서 max_length가 필드 옵션
+  - 제약조건: 특정 규칙을 강제하기 위해 테이블의 열이나 행에 적용되는 규칙이나 제한사항
+  - 주요 필드 옵션:  
+    - null: 데이터베이스에서 null값을 허용할지 여부를 결정
+    - blank: form에서 빈 값을 허용할지 여부를 결정
+    - default: 필드의 기본값을 설정
+## Migrations
+- 모델 클래스의 변경사항을 db에 최종 반영하는 방법
+- migrations 과정은 다음과 같다.  
+  - model class -> migration파일 -> db.sqlite3
+  - 모델을 변경해도 migration파일을 바꿔야 제대로 적용된다.
+  - 핵심 명령어:   
+    - 1. python manage.py makemigrations - 모델 클래스를 기반으로 최종 설계도 작성
+    - 이때 생성된 것은 절대 수정하면 안된다.
+    - 2. python manage.py migrate - 최종 설계도를 db에 전달하여 반영
+  - 그리고 db.sqlite3를 확인하면 좌측에 있는 것이 테이블이다.
+## migrations 추가
+- DateTimeField의 필드 옵션:  
+  - auto_now: 데이터가 저장될 때마다 자동으로 현재 날짜시간을 저장
+  - auto_now_add : 데이터가 처음 생성될 때만 자동으로 현재 날짜 시간을 저장
+- 그리고 클래스를 바뀌면 makemigrations 해주고 또 migrate 해서 db에 넘거야 한다.
+- 이때 이미 기존 테이블이 존재하기 때문에 필드를 추가할 때 필드의 기본 값 설정이 필요하다.
+- 그러면 1, 2번 중 하나를 선택해야 한다.  
+  - 1. 현재 대화를 유지하면서 직접 기본값을 입력하는 방법
+  - 2. 현재 대화에서 나간 후 model.py에 기본 값 관련 설정을 하는 방법
+- 이때 1번을 선택한 후 아무것도 입력하지 않고 enter를 누르면 장고가 제안하는 기본값으로 설정됨
+- 그러면 2번째 설계도가 만들어진다.
+- 2번 설계도를 보면 dependencies = [('articles', '0001_initial'),] 이렇게 있는데, 1번 설계도에 의존하는 것이다.
+- 마지막에 migrate 후 테이블 필드 변화를 확인해야 한다.
+- 과정:  
+  - model class 변경 -> makemigrations -> migrate
+  - 그리고 절대로 점프는 안된다.
+  - 그런데 실습 시 설계도가 꼬였으면 수정하기 보다 설계도를 삭제하고 다시 만드는 것이 더 좋을 수도 있다.
+## 관리자 인터페이스
+- 장고가 추가 설치 및 설정 없이 자동으로 제공하는 관리자 인터페이스
+- 데이터 확인 및 테스트 등을 진행하는데 매우 유용
+- 1. admin 계정 생성: python manage.py createsuperuser
+- 일단 이름은 admin으로 찍고 나머지는 나중에 해도 된다. 패스워드의 경우 원래 찍어도 안나타난다. 주의하자.
+- 그리고 y찍으면 반영 완료
+- 2. db에 생성된 admin 계정 확인(새로고침 필수!)
+- articles를 admin.py를 활용해서 넣고 페이지를 확인하면 title, content만 나오는데 나머지는 알아서 변경된다.
+### 참고
+- 데이터베이스 초기화:  
+  - 1. 설계도를 삭제해야 한다. 0001, 0002 같은 설계도를 삭제하고 db.sqlite3파일을 삭제해야 한다. 다른거는 삭제하면 안된다.
+- showmigtations -> migrations파일들이 migrate 됐는지 안됐는지 여부를 확인
+- x 표시가 있으면 migrate가 완료되었음을 의미
+- sqlmigrate articles 0001 -> 이거는 해당 migrations 파일이 sql언어로 어떻게 번역되어 db에 전달되는지 확인하는 명령어
