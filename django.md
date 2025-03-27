@@ -242,3 +242,69 @@
 - showmigtations -> migrations파일들이 migrate 됐는지 안됐는지 여부를 확인
 - x 표시가 있으면 migrate가 완료되었음을 의미
 - sqlmigrate articles 0001 -> 이거는 해당 migrations 파일이 sql언어로 어떻게 번역되어 db에 전달되는지 확인하는 명령어
+
+## ORM
+- 객체 지향 프로그래밍 언어를 사용해 화환되지 않는 유형의 시스템 간에 데이터를 변환하는 기술
+- 장고와 db간에 사용하는 언어가 다르기 때문에 소통이 불가능한데 orm이 중간에서 이를 해석해준다.
+### queryset api
+- orm에서 데이터를 검색, 플터링, 정렬 및 그룹화 하는데 사용하는 도구
+- 다음과 같이 구분된다. Article.objects.all()이런데 순서대로 모델 클래스, 매니저, queryset api메서드
+- 장고에서 쿼리넷 api로 orm에 보내고 orm에서 쿼리셋이나 인스턴스로 장고로 보낸다.
+- 정확한 순서는 다음과 같다.  
+  - 1. Article.objects.all()로 orm에 전송
+  - 2. 데이터베이스에 sql언어로 전체 게시글을 준다.
+  - 3. 데이터베이스에서 sql언어로 orm에 전체 게시글을 받으라고 한다,
+  - 4. orm에서 장고로 쿼리셋(전체 게시글 데이터)를 보낸다.
+- 쿼리는 데이터베이스에 특정한 데이터를 보여 달라는 요청이다.
+- 쿼리문을 작성한다 라고 하는데 원하는 데이터를 얻기 위해 데이터베이스에 요청을 보낼 코드를 작성한다는 뜻이다.
+- 쿼리셋은 데이터베이스에게서 전달 받은 객체 목록(데이터 모음)이다.
+- 장고 orm을 통해 만들어지는데 단, 데이터베이스가 단일한 객체를 반환할 때는 쿼리셋이 아닌 모델(class)의 인스턴슬 반환된다.
+- 결국 쿼리셋 api는 파이썬의 모델 크래스와 인스턴스를 활용해 db에 데이터를 저장, 조회, 수정, 삭제하는 것이다.
+- CRUD: 소프트웨어가 가지는 기본적인 데이터 처리 기능 -> 저장, 조회, 갱신, 삭제
+- django-extensions, ipython을 추가로 설치해야 하며 settings에 django_extenstions를 추가로 작성해야 한다.
+- django shell: 장고 환경 안에서 실행되는 python shell(터미널 이라고 생각하면 된다.) : python manage.py shell_plus
+- 그리고 바로 장고 프로젝트에 영향을 준다.
+- shell_plus 순서:  
+  - 1. article = Article()
+  - 2. article.title = 'first'
+  - 3. article.content = 'django!'
+  - 4. article.save()
+  - 이렇게 하면 db.sqlite에 데이터가 생긴다.
+  - article.pk는 장고가 추가로 제공하는 기능으로 primary key의 뜻이다. 현재 id를 나타낸다.
+  - 두번째 방법:  
+    - article = Article(title='second', content='django!')이렇게 한줄에 쓰기
+    - 이때 아직 id는 없다.
+    - article.save()
+    - 이렇게 하면 id가 생긴다. 그리고 데이터가 추가로 생성된다.
+- 마지막에 Article.objects.all()를 찍으면 쿼리셋을 받는다.  
+    - 세번째 방법:  
+      - 1. Article.objects.create(title='third', content='django!')create함수 쓰기
+      - 그러면 바로 데이터가 생성된다.
+      - 이방법은 save 필요 없다.
+      - 그런데 이 방법은 인스턴스를 만든 적이 없다. article = Article() 이런거.
+      - article = Article.objects.create(...) 이렇게 했으면 pk가 생긴다.
+- save(): 객체를데이터베이스에 저장하는 인스턴스 메서드->Model에 들어가 있음
+- 대표적인 조회 메서드:  
+  - Return nex QuerySets   
+    - all()
+    - filter()
+  - Do not reutrn QuerySets  
+    - get()
+  - all(): 전체 데이터 조회
+  - filter(): 주어진 매개변수와 일치하는 객체를 포함하는 쿼리셋 반환
+  - get(): 주어진 매개변수와 일치하는 객체를 반환 -> pk 조회 할 때만 써라.
+  - 고유성을 보장하는 조회에서 사용해야 한다.
+- 데이터 수정:  
+  - 인스턴스 변수를 변경 후 save메서드 호출
+  - 1. 먼저 수정할 인스턴스 조회
+  - 2. 인스턴스 변수를 변경
+  - 3. 저장
+  - 4. 정상적으로 변경된 것을 확인
+- 데이터 삭제:  
+  - 1. 삭제할 인스턴스 조회
+  - 2. article.delete()
+### ORM with view
+- 장고 쉘에서 연습했던 쿼리셋 api를 직접 view함수에서 사용하기
+- 전체 게시글 조회
+- **참고**
+- 지워진 pk 값은 절대 재사용 안된다. 1,2,3이 있는데 2을 지우면 다음 pk는 4가 나온다.
