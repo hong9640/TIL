@@ -1,4 +1,4 @@
-# 디장고
+# 장고
 - 어떻게 풀기 보다는 어떻게 조합할지에 집중해야 한다.
 - 프레임워크를 통해 최종적으로 웹 어플리케이션을 개발한다.
 - 프레임워크는 이미 만들어진 도구로 문서와 예제 코드를 보며 활용법을 빠르게 습득하는 것이다.
@@ -375,4 +375,42 @@
 - 'fields 속성, exclude 속성'
 - exclude 속성을 사용하여 모델에서 포함하지 않을 필드를 지정할 수 도 있음
 - Meta class 주의사항
-- 장고에서 모델 폼에 대한 추가 정보나 속성을 작성하는 클래스 구조를 Meta 클래스로 작성 했을 뿐이며 파이썬의 inner class와 같은 문법적인 관점으로 접근하지 말것.
+- 장고에서 모델 폼에 대한 추가 정보나 속성을 작성하는 클래스 구조를 Meta 클래스로 작성 했을 뿐이며 파이썬의 inner class와 같은 문법적인 관점으로 접근하지 말것
+## static files
+- 서버 측에서 변경되지 않고 고정적으로 제공되는 파일
+- 정적파일은 특정 위치에 있는 자원을 요청 받아서 응답을 처리하고 제공하는 것
+- 웹 서버는 요청받은 url로 서버에 존재하는 정적자원을 제공하며 정적파일을 제공하기 위한 경로가 있어야 한다.
+### 기본 경로
+- app폴더/static/
+- articles/static/articles경로에 이미지 파일 배치
+- 스태틱 파일 경로는 static tag를 사용해야 한다.
+- built-in tag가 아니기 때문에 load tag를 사용해 import 후 사용 가능
+- STATIC_URL:  
+  - 기본 경로 및 추가 경로에 위치한 정적 파일을 참조하기 위한 url
+  - 실제 파일이나 디렉토리 경로가 아니며 url로만 존재
+  - URL + STATIC_URL + 정적파일 경로
+- static files 추가 경로
+- STATICFILES_DIRS에 문자열 값으로 추가 경로 설정
+- STATICFILES_DIRS: 정적 파일의 기본 경로 외에 추가적인 경로 목록을 정의하는 리스트
+- 결론: 정적 파일을 제공하려면 요청에 응답하기 위한 url이 필요
+- Media Files: 사용자가 웹에서 업로드하는 정적 파일
+- ImageField(): 이미지 업로드에 사용하는 모델 필드
+- 이미지 파일의 경로 문자열이 저장된다.
+- 이 필드를 사용하기 위해서는 준비사항이 있다.
+- 1. settings.py에 MEDIA_ROOT, MEDIA_URL설정
+- 2. 작성한 MEDIA_ROOT 와 MEDIA_URL에 대한 URL지정
+- MEDIA_ROOT
+- 미디어 파일들이 위차하는 디렉토리의 절대 경로
+- media_url: 미디어 루트에서 제공되는 미디어 파일에 대한 주소를 생성
+- 그 다음 urls에 지정해야 한다.
+- settings의 공식 문서 url을 통해 들어가면 url 찍는 방법이 나온다.
+- 절대로 외우는 것 아니다.
+- 'Serving files uploaded by a user during development¶'이거 보면 된다.
+- 이때 model에 image필드를 추가하는데 기존 필드 사이에 작성해도 실제 테이블 생성 시에는 가장 뒤에 추가된다.
+- blank=True 이걸 class의 필드에 추가하면 기본 빈칸으로 지정된다. 
+- form요소에 데이터 전송방식을 결정하는 속성인 emctype속성을 추가해야 한다. enctype="multipart/form-data"
+- view의 form에 files=request.FILES를 추가해야 한다.
+- 똑같은 이미지를 올려도 장고가 자동으로 난수 처리 해준다.
+- upload_to: 최종설계도를 만들면 자동으로 생성됨
+- 추가 경로를 설정한다.
+- 미디어 루트 이후 경로
