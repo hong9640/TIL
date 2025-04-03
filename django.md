@@ -477,3 +477,27 @@
 - 템플릿에서 인증 관련 데이터를 출력하는 방법
 - context_processors: 템플릿이 렌더링 될 때 호출 가능한 컨텍스트 데이터 목록
 - 작성된 컨텍스트 데이터는 기본적으로 템플릿에서 사용 가능한 변수로 포함됨
+
+## 회원가입
+- User를 create한다.
+- UserCreationForm(): 회원가입 시 사용자 입력 데이터를 받는 내장 모델폼이다.
+- User 모델을 직접 참조하지 않는 이유는 get_user_model을 사용해 User 모델을 참조하면 커스텀 user모델을 자동으로 반환해주기 때문이다.
+- 직접 참조하지 않고 get_user_model을 사용한다.
+
+## 회원탈퇴
+## 회원정보 수정
+- UserChangeForm(): 회원정보 수정 시 사용자 입력 데이터를 받는 내장함수
+## 비밀번호 변경
+- 인증된 사용자의 세션 데이터를 업데이트 하는 과정
+- PasswordChangeForm()
+- 비밀번호가 변경되면 기존 세션과 회원 인증 정보가 일치하지 않게 되어버려 로그아웃 처리 된다.
+- 이를 막기 위해서 update_session_auth_hash(request, user)를 써야 한다.
+- 필수는 아니다.
+## 인증된 사용자에 대한 접근 제한
+- 1. is_authenticated속성:  
+  - 사용자가 인증 되었는지 여부를 알 수 있는 user model속성
+  - 모든 user인스턴스에 대해 항상 True인 읽기 전용 속성
+  - 비인증 사용자에 대해서는 항상 False
+- 2. login_required 데코레이터
+- 인증된 사용자에 대해서만 view 함수를 실행시키는 데코레이터
+- view 함수 위에 @login_required를 쓰면 된다.
