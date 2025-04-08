@@ -112,3 +112,96 @@ FROM
 - COUNT(*) - 이 함수가 각 그룹에 대한 집계된 값을 계산. 그러니까 만약 나라고 하면 해당 나라에 몇 명의 사람이 있는지 나타낼 수 있다.
 - 그런데 집계 항목에 대한 세부 조건을 지정하기 위해서는 HAVING을 써야 한다.
 - 예를 들어 AVG(Milliseconds / 60000) 이렇게 세부 조건이 있을 때는 having을 써야 한다.
+
+## Managing Tables
+### create a table
+- 테이블 생성
+- CREATE TABLE table_name(이건 테이블 이름) (열 이름, 데이터 타입, 제약조건) 이 순서대로 작성된다.
+- PRAGMA table_info('examples'); 이거는 테이블 schema(구조) 확인을 한다.
+- AUTOINCREMENT 이거는 그냥 키워드. 제약조건 아니다.  
+  - 자동으로 고유한 정수 값을 생성하고 할당하는 필드 속성
+  - 필드의 자동 증가를 나타낸다.
+  - 주로 pk 필드에 적용
+  - 삭제된 값은 무시되며 재사용 할 수 없게 된다.
+  - INTEGER PRIMARY KEY AUTOINCREMENT가 작성된 필드는 항상 새로운 레코드에 대해 이전 최대 값보다 큰 값을 할당한다.
+- 데이터 타입 5개:  
+  - NULL - 아무런 값도 포함하지 않음
+  - INTEGER - 정수
+  - REAL - 부동 소수점
+  - TEXT - 문자열
+  - BLOB - 이미지, 동영상, 문서 등의 바이너리 데이터
+- Constraints(제약조건) - 데이터의 무결성 유지 및 데이터베이스의 일관성 보장.
+- 대표 3가지:  
+  - PRIMARY KEY - 해당 필드를 기본 키로 지정. Integer타입에만 적용된다!
+  - NOT NULL - 해당 필드에 null값을 허용 않도록 지정
+  - FOREIGN KEY - 다른 테이블과의 외래 키 관계를 정의
+### Modifying table fields
+- ALTER TABLE: 테이블 및 필드 조작  
+  - ALTER TABLE ADD COLUMN : 필드 추가
+  - ALTER TABLE RENAME COLUMN : 필드 이름 변경
+  - ALTER TABLE DROP COLUMN : 필드 삭제
+  - ALTER TABLE RENAME TO : 테이블 이름 변경
+- 구조는 다음과 같다.  
+  - alter table
+  - table_name(테이블 이름)
+  - add column
+  - colunm_definition;(열 제약조건)
+- NOT NULL DEFAULT : null 값이 없고 기본값은 넣을 거다.
+- 그런데 한번에 여러개의 열을 추가하는 것은 안되고 하나씩 해야 한다. 
+- 무조건 alter table - add column 이 구조를 반복해야 한다.
+### Delete a table
+- Drop Table : 테이블 삭제
+- DROP Table new_examples; 이렇게 짜면 테이블이 삭제된다.
+## Modifying Data
+### Insert data
+- 사전 준비 필요(그냥 테이블 새로 만들기!)
+- INSERT INTO table_name(c1, c2 ...)
+- VALUES (v1,v2, ..)
+- insert는 동시에 여러개 삽입 가능
+- VALUES  
+  ('title1', 'content1', '2000-01-01'),
+  ('title2', 'content2', '1900-01-01'),
+  ('title3', 'content3', '1800-01-01');
+- ('mytitle', 'mtcontent', DATE()) : 이거는 그 일자 자동 생성
+### Update data
+- 테이블 레코드 수정
+- UPDATE table_name
+- SET column_name = expression,
+- WHERE condition;
+- condition쪽에는 id = 1 이렇게 지정하면 된다.
+- set 절 다음에 수정할 필드와 새 값을 지정
+- where절에서 수정할 레코드를 지정하는 조건 작성
+- where절을 작성하지 않으면 모든 레코드를 수정
+### Delete data
+- 테이블 레코드 삭제
+- DELETE FROM table_name
+- WHERE condition;
+- 만약 where작성하지 않으면 테이블의 모든 레코드 삭제
+- DELETE FROM
+- articles
+- WHERE id IN(
+  SELECT id FROM articles
+  ORDER BY createdAt
+  LIMIT 2
+); -> 괄호 안이 서브 쿼리이다.
+- 위와 같은 코드는 articles 테이블에서 작성일이 오래된 순으로 레코드 2개를 삭제한다는 뜻이다.
+## Multi table queries
+### Joing
+- join
+- 관계(여러 테이블 간의 (논리적)연결)
+- 동명이인을 출력할 수도 있다. 그래서 테이블을 나누어서 분류하자.
+- 이때 pk가 아니라 외래 키 필드가 필요하다.
+- 만약 articles에 이름, 내용이 있다면 userid를 가지고 있어야 하고 user테이블의 경우 이름이 있을 때 roleid가 있어야 한다. 그래서 관리자인 사람만 보고 싶으면 roleid를 확인하면 되고 만약 한 사람이 이름을 변경했으면 userid 하나만 변경하면 보두 자동으로 변경된다.
+- 즉, 다른 테이블과 결합하여 출력하기 위해 join이 필요하다.
+### Joining tables
+- join: 둘 이상의 테이블에서 데이터를 검색하는 방법, select문과 같이 쓰인다.
+- FOREIGN KEY (userId) 
+    REFERENCES users(id)
+- users의 id를 참조하여 외래키를 만들겠다.
+- INNER JOIN: 
+  - 두 테이블에서 값이 일치하는 레코드에 대해서만 결과를 반환
+  - select -> from -> inner join 참조할 테이블 on 참조할 테이블의 fk = 원본 테이블의 pk
+  - 문제는 1번 회원이 작성한 모든 게실글의 제목과 작성자명을 조회 이런 식으로 나온다.
+- LEFT JOIN:
+- 오른쪽 테이블의 일치하는 레코드와 함께 왼쪽 테이블의 모든 레코드 반환
+- select -> from 원본 테이블 -> left join 참조할 테이블 -> on 참조할 테이블의 fk = 원본 테이블의 pk
