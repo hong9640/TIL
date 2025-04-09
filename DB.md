@@ -205,3 +205,62 @@ FROM
 - LEFT JOIN:
 - 오른쪽 테이블의 일치하는 레코드와 함께 왼쪽 테이블의 모든 레코드 반환
 - select -> from 원본 테이블 -> left join 참조할 테이블 -> on 참조할 테이블의 fk = 원본 테이블의 pk
+
+## Many to one relationships
+### 모델 관계
+- 한 테이블의 0개 이상의 레코드가 다른 테이블의 레코드 한 개와 관련된 관계
+- comment에 id 포함 4개 생성. -> content, created-at, updated_at
+- Article에 id 포함 5개 생성. -> title, content, created_at, updated_at
+- comment쪽에서 article에 대한 외래키를 가지고 있어야 한다. 이때 외래키는 article의 id와 연동되어 있어야 한다.
+- 보통 N:1 or 1:N 관계인데 commet(N) - article(1) 이 경우는 0개 이상의 댓글은 1개의 게시글에 작성될 수 있다는 뜻이다. 
+### 댓글 모델 정의
+- 외래키: 모델 정의 시 클래스 인스턴스 이름은 참조하는 모델 클래스의 이름의 단수형으로 작성하는 것은 권장
+- 외래키는 작성 위치 상관 없이 무조건 마지막 필드로 생성됨
+- 작성법:  
+  - ex) article = models.ForeignKey(Article, on_delete=models.CASCADE)
+  - ForeignKey(to, on_delete)
+  - to : 참조하는 모델 class 이름
+  - on_delete : 외래키가 참조하는 객체가 사라졌을 때, 외래키를 가진 객체를 어떻게 처리할 지를 정의
+  - 만약 1번 게시글에 막 200개의 파일 등이 있는데 1번 게시글이 사라진다면? 어떻게 처리할 지 정의하는 것
+  - CASCADE: 부모 객체가 삭제될 때 이를 참조하는 모든 객체도 삭제되도록 지정
+  - 만약 1번 개시글을 지우면 하위 폴더나 파일 전부 지우겠다는 뜻
+  - protect, restrict 등 기능이 다른 것은 많다. 공식 홈페이지 참조하기
+  - python manage.py sqlmigrate articles 0003 이거는 미리보기
+  - 외래키의 경우 article 이렇게 설정하면 db 생성 시 article_id로 표시된다.
+  - 외래키 설정시 단수형으로 해놔야 어느 클래스를 참조하는지 확인하기 편하다.
+### 댓글 생성 연습
+- 1. shell_plus 실행
+- 2. Comment 클래스의 인스턴스 comment 생성.(모델 생성 시 대문자로 꼭 하자! 안그러면 설계도 삭제하던가 아니면 다시 찍고 추가해야 한다!)
+- 3. 인스턴스 변수 저장
+- 4. db에 댓글 저장
+- 5. 그럼 에러 발생하는데 articles_comment테이블의 외래키, article_id 값이 누락되었기 때문이다.
+- 6. 해결하기 위해서 일단 게시글 조회. article = Article.objects.get(pk=1)
+- 7. 외래키 데이터 입력 comment.article = article, 만약 comment.article_id = article.pk로 하고싶으면 할 수도 있는데 권장은 안함.
+- 8. 댓글 저장 comment.save()
+- 9. comment = Comment.objects.get(pk=1) -> comment -> comment.article => 이걸로 게시글의 내용까지 가져올 수 있음
+- 10. comment = Comment(content='second', article=article) -> comment.save() 이렇게 하면 2번째 입력하고 정보가져올 수 있음.
+## 관계 모델 참조
+### 역참조
+- 참조(comment -> Article)
+- 역참조(Article -> comment)
+- 그런데 1은 N에 대한 역참조가 물리적으로 불가능해 별도의 역참조 키워드 필요
+- article.comment_set.all() -> 모델 인스턴스.역참조 이름.쿼리셋 api
+- 특정 게시글에 작성된 댓글 전체를 조회하는 요청
+- 특정 댓글의 게시글 참조: comment.article
+- 특정 게시글의 댓글 목록 참조: article.comment_set.all()
+## 댓글 구현
+### 댓글 create
+- view와 detail 수정
+- 그리고 article은 필요 없어서 forms에서 fields = ('content',)로 출력 필드 조절
+- url 추가 필요 path('<int:pk>/comments/', views.comment_create, name='comment_create') 이런식으로 pk를 받아야 한다.
+- save(commit=False) 필요
+### 댓글 read
+- detail view함수에서 전체 댓글 데이터 조회
+### 댓글 delete
+- 삭제 url 작성
+- view함수 정의
+- 삭제버튼 작성
+- 테스트
+- path('<int:article_pk>/comments/<int:comment_pk>/delete/', views.comments_delete, name='comments_delete'),
+- 위와 같이도 된다.
+- 댓글이 없으면 {%empty%}를 for 문 안에 쓰고 p같은 것으로 '댓글 없음'이런식으로 하면 된다.
