@@ -264,3 +264,35 @@ FROM
 - path('<int:article_pk>/comments/<int:comment_pk>/delete/', views.comments_delete, name='comments_delete'),
 - 위와 같이도 된다.
 - 댓글이 없으면 {%empty%}를 for 문 안에 쓰고 p같은 것으로 '댓글 없음'이런식으로 하면 된다.
+## Article & User
+- Article- User -> N : 1구조이다.
+- get_user_model은 user object즉, 객체를 반환한다. 그리고 models.py가 아닌 다른 모든 위치에서 사용한다.
+- settings.AUTH_USER_MODEL 이거는 accounts.User을 반환하며 models.py에서만 사용한다.
+- 게시글 create 방법:  
+  - 1. 불필요한 input 확인
+  - 2. articleform 필드 수정 -> 이건 임시 방편 아직 안끝났다!
+  - 3. 그러면 입력 시 user_id가 없기에 오류남. view의 create에서 유효성 검사 아래 다음과 같이 작성한다.  
+    - article = form.save(commit=False) 유효성 검사 한 form 저장
+    - article.user = request.user 이미 요청 객체에 어떤 사람인지 들어있기 때문에 조회하지 않는다.
+    - 그 다음 article = form.save() article 변수 저장한다.
+- 게시글에서 작성자를 읽으려면 <p>작성자 : {{ article.user }}</p> 이 코드 쓰면 된다.
+- 게시글 업데이트:  
+  - 1. 기존 update에 
+- Comment - User -> N : 1구조이다.
+## decorators
+- view 함수의 동작을 수정하거나 추가 기능을 제공하는데 사용되는 데코레이터
+- 코드의 재사용성을 톺이고 뷰 로직을 간결하게 유지
+## Allowed HTTP methods
+- 특정 http method로만 view 함수에 접근할 수 있도록 제한하는 데코레이터
+- require_http_methods : 지정된 http method만 허용
+- require_safe : get과 head method만 허용
+- require_POST : post method만 허용
+- 만약 지정되지 않은 http method로 요청이 들어오면 405 를 반환. 대문자로 HTTP method를 지정
+## ERD
+- 데이터베이스의 구조를 시각적으로 표현하는 도구
+- 엔티티, 속성, 관계로 이루어진다.
+- 표처럼 그려진다.
+- 주로 관계:  
+  - 일대일
+  - 다대일
+  - 다대다
