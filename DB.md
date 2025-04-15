@@ -296,3 +296,58 @@ FROM
   - 일대일
   - 다대일
   - 다대다
+## mant to many relationships
+- 양쪽 모두 N : 1 관계를 가진다.
+- N:M or M:N
+- 예를 들어 병원진료 시스템 모델 관계를 만들 때 필요하다.
+- 동시에 다른 의사한테 예약하려고 하면 환자 클래스에 외래키를 만드는 것이 아닌 중개모델이 필요하다.
+- 장고에서는 ManyToManyField로 중개모델을 자동으로 생성
+- ManyToManyField는 중계 모델이 생성될 뿐이어서 doctor테이블이나 patient테이블에 작성해도 상관은 없음
+- 다만 참조/역참조 관계만 잘 기억하면 된다.
+- 이때 만약 patient에 ManyToManyField가 있으면 patient가 참조이다.
+- patient1.doctors.add(doctor1) 예약 생성
+- patient1.doctors.add(doctor1) patient1이라는 환자에게 doctor1이라는 의사를 연결해라.
+- through는 중개 테이블에 추가 데이터를 사용해 M:N관계를 형성하려는 경우에 사용
+- M:N관계로 맺어진 두 테이브렝는 물리적인 변화가 없다.
+- N:1관계는 완전한 종속 관계지만 M:N은 종속적인 관계가 아니다.
+### ManyToManyField
+- 양방향 관계
+- 중복 방지
+- 대표인자:  
+  - 1. related_name  
+    - 역참조시 사용하는 manager name을 변경
+    - 만약 related_name='patients'라고 하면 doctor.patient_set.all()이 아니라 doctor.patients.all() 이렇게 쓰게 된다. 변경 후 이전 manager name은 사용 불가
+  - 2. symmetrical  
+    - 관계 설정 시 대칭 유무 설정
+    - MTMfield가 동일한 모델을 가리키는 정의에서만 사용, 기본값은 True이다.
+    - True일 경우:  
+      - source 모델의 인스턴스가 target모델의 인스턴스를 참조하면 자동으로 target모델 인스턴스도 source모델 인스턴스를 자동으로 참조하도록 함
+      - 내가 당신의 친구라면 자동으로 당신도 내 친구가 된다.
+    - False일 경우:  
+      - True와 반대(대칭되지 않는다.)
+    - 만약 인스타의 팔로우 기능의 경우 False를 해야 한다. 왜냐하면 대칭되면 안되니까!
+  - 3. through  
+    - 사용하고자 하는 중개모델을 지정
+    - 일반적으로 추가데이터를 M:N관계와 연결하려는 경우에 활용
+- 대표 methods  
+  - add()- 관계 추가, 지정된 객체를 관련 객체 집합에 추가
+  - remove()- 관계 제거, 관련 객체 집합에서 지정된 모델 객체를 제거
+## 좋아요 기능 구현
+- M:N 관계로 Article(M) - User(N)관계이다.
+- 0개 이상의 게시글은 0명 이상의 회원과 관련
+- 게시글은 회원으로부터 0개 이상의 좋아요를 받을 수 있고 회원은 0개 이상의 게시글에 좋아요를 누를 수 있음.
+- artticle앱의 모델에 users = models.ManyToManyField(settings.AUTH_USER_MODEL) 작성
+- M:N관계 설정 시 그냥 복수형으로 이름을 짓는 것보다, 지금 우리가 만드는 기능이 무엇인지 생각해보고 명시적인 매니저 이름을 설정하는 것이 좋다.
+- 그냥 users가 아닌 like_users 이렇게 하는 것이 좋다.
+- 게시글에 좋아요를 누른 모든 유저 조회 -> 게시글.users.all()
+- 게시글 1번에 좋아요를 누른 모든 유저 조회 -> 게시글1.like_users.all()
+- 유저1이 좋아요를 누른 모든 게시글
+- 유저1.article_set.all()
+- 모델 작성 후 마이그레이션을 하면 오류가 뜬다! -> 역참조 매니저가 충돌했기 때문이다.
+- like_users필드를 생성하면 자동으로 역참조 매니저 article_set이 생성된다. 그런데 이전 N:1 관계에서 같은 이름의 매니저를 사용 중이다.
+- 그래서 related_name 작성이 필요하다.
+- User-Article간 사용 가능한 전체 related manager  
+  - article.user
+  - user.article_set
+  - article.like_users
+  - user.like_articles
