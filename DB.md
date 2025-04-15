@@ -351,3 +351,43 @@ FROM
   - user.article_set
   - article.like_users
   - user.like_articles
+## 팔로우 기능 구현
+- 프로필 페이지 -> accounts쪽에 만든다.
+- path('profile/<str:username>/', views.profile, name='profile') 이런식으로 쓴다. 그런데str은 안붙여도 된다.
+- <str:username>이렇게 시작해도 상관은 없다. 그런데 url의 앞부분에 쓰면 str이기 때문에 다른 것들을 전부 걸러버린다. 그래서 <str:username>이렇게 쓰고 싶다면 url 맨 마지막에 쓰도록 하자.
+- username 보낼 때 구분 잘 해야한다. <a href="{% url "accounts:profile" request.user %}">내 프로필</a> 이럴 경우 내 프로필로 전송
+- 작성자 : <a href="{% url "accounts:profile" article.user.username %}">{{ article.user }}</a> 이럴 경우 작성자의 username을 받아서 간다.
+- 모델 관계: user:user -> M:N 0명 이상의 회원은 0명 이상의 회원과 관련
+- 팔로잉: 내가 누구를 참조한다. -> user.followings.all()
+- 팔로워: 남이 나를 참조한다.(역참조) -> user.user_set.all(), user.followers.all()
+- 팔로잉 버튼 만들 때 user.pk가 아닌 person.pk를 써야 한다. 상대방의 정보를 넘기는 거니까!
+- db를 보면 from_user_id, to_user_id가 있는데 이때 from이 to를 팔로잉 하는 거다!
+## Fixtures
+- 장고 개발 시 데이터베이스 초기화 및 공유를 위해 사용되는 파일 형식
+- 장고에서는 fixtures를 사용해 앱에 초기 데이터를 제공
+- dumpdata-생성(데이터 추출)
+- loaddata-로드(데이터 입력)
+- 사전준비- M:N까지 모두 작성된 장고 프로젝트에서 유저, 게시글 댓글 등 각 데이터를 최소 2-3개 이상 생성해두기
+- dumpdata: 데이터베이스의 특정 모델 혹은 앱 전체 데이터를 추출
+- python manage.py dumpdata [앱이름.모델이름] [옵션] > 추출파일명.json
+- 실제 대괄호는 안쓴다!
+- python manage.py dumpdata --indent 4 articles.article > articles.json
+- 위와 같은 형식인데 --indent 4 이거는 4칸 들여쓰기. 보기좋아짐. 안 써도 상관 없음.
+- 단, Fixtures파일을 직접 만들면 안된다. 반드시 dumpdata 명령어를 사용하여 생성할 것
+- loaddata: dumpdata를 통해 추출한 데이터 파일을 다시 데이터베이스에 반영
+- python manage.py loaddata 파일 경로
+- 그러면 한글 때문에 오류가 나는데 아래와 같이 진행해야 한다.  
+- 0. json 파일 선택
+- 1. 먼저 코드 아래의 UTF-8 클릭
+- 2. save with Encoding
+- 3. 거기서 UTF-8선택
+- 아니면 python -Xutf8 manage.py dumpdata [생략] 쓰기
+- 순서가 중요할 수도 있는데 그럴때는 users, article, comments이런 순으로 진행
+### improve query
+### annotate
+### select_related
+- SQL의 innerjoin 사용
+- 섣부른 최적화는 금지!!!
+### exits
+- 쿼리 셋에 결과가 하나 이상 존해자는지 여부를 확인하는 메서드
+- 대량의 쿼리셋에 있는 특정 객체 검색에 유용
