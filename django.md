@@ -501,3 +501,59 @@
 - 2. login_required 데코레이터
 - 인증된 사용자에 대해서만 view 함수를 실행시키는 데코레이터
 - view 함수 위에 @login_required를 쓰면 된다.
+## DRF
+- 장고에서 Restful API서버를 쉽게 구축할 수 있도록 도와주는 오픈소스 라이브러리
+- djangorestframework 이 라이브러리 꼭 설치해야 한다.
+- pip install djangorestframework 이렇게 찍으면 된다.
+- 'rest_framework',그리고 이것을 세팅의 앱 등록을 해주어야 한다!
+- Postman 이라는 앱이 있는데 api개발 및 테스트를 위한 서비스를 제공한다.
+- Serialization: 직렬화, 여러 시스템에서 활용하기 위해 데이터 구조나 객체 상태를 나중에 재구성할 수 있는 포맷으로 변환하는 과정
+- 그리고 어떠한 언어나 환경에서도 나중에 다시 쉽게 사용할 수 있는 포맷으로 변환하는 과정
+- ModelSerializer: 장고 모델과 연결된 시리얼라이저 클래스
+- many옵션: serialize 대상이 쿼리셋인 경우 입력
+- data속성: serialized data객체에서 실제 데이터를 추출
+- api_view: drf 뷰 함수에서는 필수로 작성되며 뷰 함수를 실행하기전 http메서드를 확인
+- raise_exception: is_valid()의 선택인자로 유효성 검사를 통과하지 못할 경우 예외를 발생시킨다. 그래서
+- return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST) 이걸 안써도 된다!
+### REST API
+- API: 두 소프트웨어가 서로 통신할 수 있게 하는 메커니즘
+- 소프트웨어와 스프트웨어 간 지정된 정의로 소통하는 수단
+- 스마트폰의 날씨 앱은 기상청에서 제공하는 api를 통해 기상청 시스템과 대화하여 최신 날씨 정보를 표시하는 것이다.
+- 결국 api의 역할은 복잡한 코드를 추상화하여 대신 사용할 수 있는 몇 가지 더 쉬운 구문을 제공하는 것.
+- REST는 API 서버를 개발하기 위한 일종의 소프트웨어 설계 방법론.
+- REST원리를 따르는 시스템을 RESTful 하다고 부른다.
+- 자원을 정의하고 자원에 대한 주소를 지정하는 전반적인 방법을 서술한다.
+- '각각 api서버 구조를 작성하는 모습이 너무 다르니 어느정도 약속을 만들어서 다같이 통일해서 쓰자!'
+- REST API: REST라는 설계 디자인 약속을 지켜 구현한 API
+- REST에서 자원을 장의 및 주소 지정하는 방법:  
+  - 1. 자원의 식별:URL
+  - 2. 자원의 행위:HTTP Methods
+  - 3. 자원의 표현: JSON데이터(궁극적으로 표현되는 데이터 결과물)
+- URI(통합 자원 식별자): 인터넷에서 자원을 식별하는 문자열로 가장 일반적인 URI는 웹 주소로 알려진 URL 
+- URL(통합 자원 위치): 웹에서 주어진 리소스의 주소로 네트워크 상에 리소스가 어디 있는지를 알려주기 위한 약속
+- ex) 스키마(http)/도메인 이름(www.ddd.com)/포트(80)숫자임/파일의 경로/('?'으로 시작)파라미터/(#으로 시작)앵커
+- 스키마: 브라우저가 리소스를 요청하는데 사용해야 하는 규약
+- 도메인 이름: 요청중인 웹 서버를 나타냄. ip주소를 사용하는 것도 가능하지만 사람이 외우기는 어려워서 주로 Domain Name으로 사용
+- Port: 웹 서버의 리소스에 접근하는데 사용되는 기술적인 문
+- Path: 웹 서버의 리소스 경로, 실제 위치가 아닌 추상화된 형태의 구조를 표현  
+  - 예를 들어 articles/create/가 실제 articles 폴더 안의 create 폴더 안을 나타내는 것은 아니다.
+- Parameters: 웹 서버에 제공하는 추가적인 데이터로 '&'로 구분되는 key-value쌍 목록
+- Anchor: 일종의 북마크를 나타내며 브라우저에 해당 지점에 있는 콘텐츠를 표시한다.
+- '#' 이후 부분은 서버에 전송되지 않는다. 이 #은 브라우저가 이동시킨다. 서버와는 관계 없다.
+### 자원의 행위
+- HTTP Request Methods: 리소스에 대한 행위를 정의
+- 총 4가지가 있다.  
+  - GET: 데이터만 검색
+  - POST: 서버의 상태를 변경
+  - PUT: 요청한 주소의 시로스를 수정
+  - DELETE: 지정된 리소스를 삭제
+- HTTP response status codes: 특정 http 요청이 성공적으로 완료 되었는지 여부를 나타냄
+- 5가지 응답 그룹으로 분류  
+  - Informational responses 100-19
+  - Successful, resposes 200-299
+  - Redirction messages 300-399
+  - Clinet error response 400-499
+  - Server error(responses) 500-599
+- 자원의 표현:
+- 그동안 서버가 응답했던 것인데 지금까지는 html만 응답했지만 ReST API는 이 중에서더ㅗ json 타입을 응답하는 것을 과장
+- 서버는 html만 응답하고 이제는 json데이터를 응답하는 REST API서버로의 변환
