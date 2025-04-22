@@ -146,8 +146,8 @@
   - for (let i = 0; i<6; i++) { console. log(i):} 0부터 5까지
 - for in: for (variable in object) {statement} 객체의 열거 가능한 속성에 대해 반복, 딕셔너리, 리스트 전부 가능
 - for of: 반복 가능한 객체에 대해 반복, for (variable of iterable) {statement}, 딕셔너리 쓰려고 하면 오류, 리스트 써야 함
-- for in은 순서가 보장이 안된다. 그래서 순서가 중요한 배열에서는 사용하지 않는다.
-- 배열에서는 for이나 for of문을 사용한다.
+- for in은 순서가 보장이 안된다. 그래서 순서가 중요한 배열에서는 사용하지 않는다. 객체 전용
+- 배열, 문자열 등 에서는 for이나 for of문을 사용한다.
 - 만약 [a, b, c]이렇게 있을 경우 for in을 쓰면 0,1,2가 나오고 for of를 쓰면 a, b, c가 나온다.
 - for문에서는 let만 써야 한다. i를 재할당 하면서 사용하기에 const를 사용하면 에러 발생한다.
 - for in, for of의 경우 const를 사용해도 에러가 발생하지 않는다. 단, conts 특징에 따라 블록 내부에서 변수 수정 불가능
