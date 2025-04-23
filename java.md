@@ -158,14 +158,15 @@
     }' (선언식)
 - 위와 같이 구조를 가진다. 만약 return이 없다면 undefined를 반환
 - 정의 방법은 2가지:  
-  - 선언식
+  - 선언식 - 선언식 위주로 쓰자.
   - 표현식
 - 'const sub = function (num1, num2) {
       return num1 - num2
     }' (표현식)
-- 선언식 장점: 호이스팅 됨, 코드의 구조오 가독성 면에서는 표현식에 비해 좋다.
+- 선언식 장점: 호이스팅 됨, 코드의 구조와 가독성 면에서는 표현식에 비해 좋다.
 - 표현식 특장: 변수선언만 호이스팅 되고 함수 할당은 실행 시점에 이루어진다.
 - 함수 이름이 없는 익명 함수를 사용할 수 있음.
+- 호이스팅: 선언을 끌어올린다.
 ## 매개변수
 - 기본함수 매개변수 : Anonymous
 - 나머지 매개변수: 임의의 수의 인자를 배열로 허용하여 가변 인자를 나타내는 방법
@@ -175,3 +176,58 @@
 ## 화살표 함수 표현식
 - 위의 표현식을 화살표 함수로 바꾸면 const sub = (num1, num2) => {return num1 - num2}
 - 소괄호는 매개변수가 1개일 때문 가능하다. 그래서 생략하지 않는 것을 권장한다. 또한 표현식 ㅣ한줄이라면 중괄호와 return을 제거할 수 있다. 일단은 중괄호와 return을 함께 쓰는것 추천
+
+## 객체
+- const user = { name: 'Alice', greeting:function() { return 'hello}} 이런 형식으로 작성한다.
+- key는 문자형만, value는 모든 자료형 허용
+- // 조회: console.log(user.name) => Alice
+- // 추가: user.address = 'korea', console.log(user) => // {name: 'Alice', key with space: true, address: 'korea', greeting: ƒ}
+- // 수정: user.name = 'Bella', console.log(user.name)
+-  // 삭제: delete user.name, console.log(user)
+-  in 연산자는 속성이 객체이 존재하는지 여부를 확인한다. 
+- // in 연산자: console.log('greeting' in user) // true
+- // 메서드 호출: console.log(user.greeting()) // hello
+### this 키워드
+- this 키워드: return `Hello my name is ${this.name}`
+- 함수 내에서 객체의 속성 및 메서드에 접근하기 위해 사용한다. 
+- 위의 객체 예시에서 return에 위와 같이 this를 쓴다.
+- 이때 name은 그냥 객체의 프로퍼티로 객체가 아니기에 this.name 이렇게 써야 한다.
+- console.log(person.greeting()) // Hello my name is Alice
+- 단순호출 => 가리키는 대상은 전역 객체로 window가 나오게 된다.
+- 메서드를 호출하게 되면 예를 들어 console.log(myObj.myFunc()) myObj: 객체명, myFunc(): 함수 명 이런식으로 하면 가리키는 대상은 메서드를 호출한 객체로 console.log(myObj.myFunc()) // myObj 이와 같은 결과가 나온다.
+- forEach 인자로 작성된 함수는 일반적인 함수 호출이어서 this가 전역 객체를 가리키지만 화살표 함수는 자신만의 this를 가지지 않기에 외부 함수에서 this값을 가져온다.
+### 추가 객체 문법
+- 키 이름과 값으로 쓰이는 변수의 이름이 같으면 단축 구문 사용 가능
+- 메서드 선언 시 function 키워드 생략 가능
+- 계산된 속성 : 키가 대괄호로 둘러싸여 있는 속성, 고정된 값이 아닌 변수 값을 사용할 수 있음
+- 구조 분해 할당: 배열 또는 객체를 분해하여 객체 속성을 변수에 쉽게 할당할 수 있는 문법
+- 전개구문: 객체복사, 얕은 복사에서 활용 가능
+- ...obj 이런 식으로 쓴다.
+- const obj = { b: 2, c: 3, d: 4 }, const newObj = { a: 1, ...obj, e: 5 }, console.log(newObj) // {a: 1, b: 2, c: 3, d: 4, e: 5}
+- optional changing: console.log(user.address?.street) // undefined
+- 위와 같이 쓰며 address가 없을 시 ? 를 붙이면 평가를 멈추고 undefined을 반환한다.
+- 만약 optional changing을 안쓰면 console.log(user.address && user.address.street) 이런 식으로 해야 한다.
+- 존재하지 않아도 괜찮은 대상에만 사용해야 하며 남용하면 안된다.
+### json
+- 형식이 있는 문자열
+## Array
+- 대괄호를 이용해 작성해야 한다.
+- 주요 메서드:  
+  - push / pop -> 뒤에
+  - unshift / shift -> 앞에
+- Array Helper Methods:  
+  - 배열의 각 요소를 순회하며 각 요소에 대한 함수(콜백함수)fmf ghcnf
+  - 대표 메서드: forEach(), map(), filter(), every(), some(), reduce()등
+  - 메서드 호출 시 인자로 함수(콜백함수)를 받는 것이 특징
+- 콜백 함수: 다른 함수에 인자로 전달되는 함수
+- 외부 함수 내에서 호출되어 일종의 루틴이나 특정 작업을 진행
+- forEach = 반환 값 없음, 배열 내의 모든 요소 각각에 대해 함수를 호출
+- map = 배열 내의 모든 요소 각각에 대해 함수를 호출
+- 함수 호출 결과를 모아 새로운 배열을 반환
+## map 함수
+- arr.map(callback(itme[, index[, array]]))
+
+## 배열 순회 조합
+1. for lop
+2. for of
+3. forEach
