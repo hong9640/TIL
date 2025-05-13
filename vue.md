@@ -208,3 +208,34 @@
 - 예를 들어 template 안에 div 쓰고 그 안에 요소 쓰기
 - scoped 속성은 컴포넌트 내부 요소에게만 적용되도록 범위를 제한하는 기능이다.
 - 즉, 스타일이 컴포넌트 바깥으로 유출되거나 다른 컴포넌트에서 정의한 스타일이 현재 컴포넌트를 침범하지 않도록 막아 줌
+## pasing Props
+- Props:  
+  - 부모 컴포넌트로부터 자식 컴포넌트로 데이터를 전달하는데 사용되는 속성
+  - 부모 속성이 업데이트되면 자식으로 전달 되지만 그 반대는 안됨
+  - 부모 컴포넌트에서만 변경하고 이를 내려받는 자식 컴포넌트는 자연스럼게 갱신
+- one-way data flow:  
+  - 모든 props는 자식 속성과 부모 속성 사이에 하향식 단방향 바인딩을 형성
+  - 단방향인 이유는 데이터 흐름의 일관성 및 단순화 때문임
+- 사전준비:  
+  - 1. APP > Parent > ParentChild 컴포넌트 관계 작성
+  - 2. APP 컴포넌트 작성
+  - 3. Parent 컴포넌트 작성
+  - 4. ParentChild 컴포넌트 작성
+- Props 작성:  
+  - my-msg='message' props 이름=props 값
+  - 무조건 html 처럼 캐밥 케이스로 작성해야 한다. mymsg -> my-msg 이렇게
+  - <ParentChild my-msg="message"/> 이런식으로
+  - 바인딩 하자!
+  - 
+- Props 선언:  
+  - defineProps를 사용해 선언, script에 작성한다.
+  - 문자열 배열을 이용하거나 객체를 선언하여 이용하기도 한다.(딕셔너리)
+  - 자식에 작성한다.
+  - defineProps({userName: String}) 이거는 자식이 부모로무터 userName 이라는 prop를 문자열 타입으로 받을 것이라는 선언
+  - 만약 item: Object 이렇게 되어 있으면 객체 타입으로 받을 것이라는 의미
+  - <ChildItem v-for="item in items":key="item.id":item="item"/> 이건 context로 생각하면 편함. key, value 2개 필요
+  - 만약 console로 보고 싶으면 const props = 이렇게 앞에 const를 정의해 준 후 console.log를 해야 함
+- emit:  
+  - 부모가 props 데이터를 변경하도록 소리침
+  - $emit() 형식으로 쓰며 자식 컴포넌트가 이벤트를 발생히켜 부모 컴포넌트로 데이터를 전달하는 역할의 메서드
+  - $emit(event ,args) event: 커스텀 이벤트 이름, args: 추가인자
