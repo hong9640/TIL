@@ -239,3 +239,37 @@
   - 부모가 props 데이터를 변경하도록 소리침
   - $emit() 형식으로 쓰며 자식 컴포넌트가 이벤트를 발생히켜 부모 컴포넌트로 데이터를 전달하는 역할의 메서드
   - $emit(event ,args) event: 커스텀 이벤트 이름, args: 추가인자
+
+## Routing
+- 네트워크에서 경로를 선택하는 프로세스
+- Vue Router: Vue 공식 라우터
+- router.push(): 다른 위치로 이동하기
+- router.replace(): 현재 위치 바꾸기
+- route:  
+  - 읽기 전용
+  - 반응형
+  - 현재 경로에 대한 정보 확인
+  - 하지만 route 객체 자체를 통해 페이지 이동을 직접 제어할 수는 없음
+  - useRoute()는 현재 url상태를 일기 위한 객체를 제공하는것
+- router:  
+  - 페이지 이동, 네비게이션 관련 메서드 제공
+  - 네비게이션 가드 등록, 히스토리 제어 같은 기능 사용 가능
+  - 프로그램적으로 경로 변경, 뒤로 가기, 앞으로 가기
+  - useRouter는 라우터 전체 제어를 담당하는 객체를 제공하며 push, replace등의 메서드를 사용하여 경로 이동을 실행할 수 있음
+- Navigations Guard:  
+  - vue router를 통해 특정 url에 접근할 때 다른 url로 redirct하거나 취소하여 내비게이션을 보호
+  - Globally, Per-route, In-component 3가지 있음
+  - Globally:  
+    - 애플리케이션 전역에서 동작하는 가드, index.js에 작성한다.
+    - beforeEach, BeforeResolve, afterEach 3가지 있음
+    - beforeEach: 다른 url로 이동하기 직전에 실행되는 함수, 모든 가드의 콜백함수는 2개의 인자를 받음
+  - pre-route:  
+    - 특정 라우터에서만 동작
+    - beforeEnter메서드 있고 index의 routes에 쓴다
+    - beforeEnter는 특정 route에 진입했을 때만 실행된다.
+  - In-component:  
+    - 특정 컴포넌트 내에서만 동작하는 가드, 각 컴포넌트의 script에 작성
+    - onBeforeRouteLeave:  
+      - 현재 라우트에서 다른 라우트로 이동하기 전에 실행
+    - onBeforeRouteUpdate:  
+      - 라우트 업데이트 시 추가적인 로직을 처리
