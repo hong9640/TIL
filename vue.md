@@ -273,3 +273,47 @@
       - 현재 라우트에서 다른 라우트로 이동하기 전에 실행
     - onBeforeRouteUpdate:  
       - 라우트 업데이트 시 추가적인 로직을 처리
+## state Management
+- 상태 관리
+- vue 컴포넌트는 이미 반응형 상태를 관리하고 있음, 상태 === 데이터
+- 상태(state): 앱 구동에 필요한 기본 데이터
+- 뷰(view): 상태를 선언적으로매핑하여 시각화
+- 기능(Actions): 뷰에서 사용자 입력에 대해 반응적으로 상태를 변경할 수 있게 정의된 동작
+- 뷰 -> 기능 -> 상태 -> 뷰 단방향 데이터 흐름이다.
+- 상태 관리의 단순성이 무너지는 시점:  
+  - 1. 여러 컴포넌트가 상태를 공유할 때
+  - 2. 여러 뷰가 상태에 종속되는 경우
+  - 3. 서로 다른 뷰의 기능이 동일한 상태를 변경시켜야 하는 경우
+- 해결책: 각 컴포넌트의 공유 상태를 추출하여 중앙 저장소를 만들어 관리
+- 각 컴포넌트의 공유상태를 추출하여 전역에서 참조할 수 있ㄴ는 저장소에서 관리
+- vue의 공식 상태 관리 라이브러리 === "Pinia"
+## Pinia
+- store:  
+  - 중앙 저장소
+  - 모든 컴포넌트가 공유하는 상태, 기능 등이 작성됨
+  - defineStore()의 반환 값의 이름은 user와 store를 사용하는 것을 권장
+  - 첫번째 인자는 애플리케이션 전체에 걸쳐 사용되는 sotre의 고유 id
+- state:  
+  - 반응형 상태(데이터)
+  - ref() === state
+- getters:  
+  - 계산된 값
+  - computed() === getters
+- actions:  
+  - 메서드
+  - function() === actions
+- Setup Stores의 반환 값
+- pinia 상태들을 사용 하려면 반드시 반환해야 함
+- plugin:  
+  - 애플리케이션의 상태 관리에 필요한 추가 기능을 제공하거나 확장하는 도구나 모듈
+  - 애플리케이션의 상태 관리를 더욱 간편하고 유연하게 만들어주며 패키지 매니저로 설치 이후 별도 설정을 통해 추가 됨
+- 경로: @는 /src이다.
+- .은 현재 경로에서 시작
+- ..은 한칸 위 폴더에서 시작한다.
+- <p>state : {{ store.count }}</p>
+- <p>getters: {{ store.doubleCount }}</p>
+- <button @click="store.increment">click</button>
+- <Example />
+- import Example from './components/example.vue';
+    import { useCounterStore } from '@/stores/counter.js'
+  const store = useCounterStore()
